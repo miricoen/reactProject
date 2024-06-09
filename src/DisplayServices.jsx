@@ -2,7 +2,7 @@ import ServiceStore from "./ServiceStore";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -14,6 +14,14 @@ import TextField from "@mui/material/TextField";
 
 export default function DisplayServices() {
   const [formOpen, setFormOpen] = useState(false);
+  const [services, setServices] = useState([]);
+
+  useEffect(() => {
+    ServiceStore.getServiceList.then((data) => {
+      setServices(data);
+    });
+  }, []);
+
   let serv = {
     id: "11",
     name: "",
@@ -26,15 +34,9 @@ export default function DisplayServices() {
     return (
       <div>
         <Card sx={{ maxWidth: 345 }}>
-          {/* <CardMedia
-            sx={{ heightprintService: 140 }}
-            image="https://success2u.co.il/wp-content/uploads/2021/03/success-image-43-1.png"
-            title="businessImage"
-          /> */}
-
           <CardMedia
             component="img"
-            alt="green iguana"
+            alt="businessImage"
             height="140"
             image="https://success2u.co.il/wp-content/uploads/2021/03/success-image-43-1.png"
             title="businessImage"
@@ -56,19 +58,22 @@ export default function DisplayServices() {
       </div>
     );
   }
+  
   function addserv() {
     ServiceStore.addService(serv);
     handleClose();
+    window.location.reload(); // Refresh the page
   }
 
   function handleClose() {
     setFormOpen(false);
   }
+
   return (
     <div>
       <div className="printService">
-        {ServiceStore.list.map((object, key) => (
-          <div key={key}>{printService(object)}</div>
+        {services.map((service, key) => (
+          <div key={key}>{printService(service)}</div>
         ))}
       </div>
       <Button onClick={() => setFormOpen(true)} id="admin" size="small">

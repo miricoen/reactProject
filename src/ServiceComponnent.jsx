@@ -1,64 +1,69 @@
-import React, { useState } from "react";
-import ServiceStore from "./ServiceStore";
-import { useRouteLoaderData } from "react-router-dom";
-import UserStore from "./UserData";
-import BusinessStore from "./BusinessStore";
-import MeetingStore from "./MeetingStore";
 
-import DateTimePicker from "react-datetime-picker";
-
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import CardMedia from "@mui/material/CardMedia";
-
-// import dayjs from "dayjs";
-// import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-
+import React, { useState, useEffect } from "react";
+import ServiceStore from "./ServiceStore"; // ייבוא של חנות השירותים
+import MeetingStore from "./MeetingStore"; // ייבוא של חנות הפגישות
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions,
+} from "@mui/material";
+import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import { Button, CardActionArea, CardActions, IconButton } from "@mui/material";
-
-//to castomer
-export default function ServicesComponent() {
-  const [openForm, setOpenForm] = useState(false);
-  const [value, setValue] = React.useState(null);
-
-  var meeting = {
+export default function ServiceComponent() {
+  const [services, setServices] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [meeting, setMeeting] = useState({
     id: "758",
     serviceType: "11",
-    dateTime: "2021-06-20T10:00:00.000Z", //מבנה של תאריך ושעה סטנדרטי בjs
+    dateTime: "2021-06-20T10:00:00.000Z",
     clientName: "",
     clientPhone: "",
     clientEmail: "m@m.com",
+  });
+
+  useEffect(() => {
+    ServiceStore.getServiceList
+      .then((data) => {
+        setServices(data);
+        setIsLoading(false); // Set loading to false after data is fetched
+      })
+      .catch((error) => {
+        console.error("Error fetching services:", error);
+        setIsLoading(false);
+      });
+  }, []);
+
+  const handleClickOpen = (serviceName) => {
+    setMeeting({ ...meeting, serviceType: serviceName });
+    setOpen(true);
+  };
+  
+
+  const handleDialogClose = () => {
+    setOpen(false);
   };
 
-  const handleClose = () => {
-    setOpenForm(false);
-  };
-  const add = () => {
+  const add = (e) => {
+    e.preventDefault();
     return new Promise((resolve) => {
       fetch("http://localhost:8787/appointment", {
         method: "POST",
-        body: JSON.stringify({
-          meeting,
-        }),
+        body: JSON.stringify(meeting),
         headers: { "Content-Type": "application/json" },
       })
         .then((res) => {
           if (res.status === 200) {
-            MeetingStore.list.push(meeting);
-            setOpenForm(false);
+            MeetingStore.list.push(meeting); // הוספת הפגישה לחנות הפגישות
+            handleDialogClose(); // סגירת הדיאלוג
             resolve(true);
           } else {
             alert("date is not valid please enter new date.");
@@ -71,116 +76,113 @@ export default function ServicesComponent() {
         });
     });
   };
-  // function addAppointment() {
-  //   setOpen(true);
-  // }
 
-  function print(serve) {
-    console.log(serve);
+  // רכיב הכרטיס והדיאלוג
+  function printService(serve) {
+    if (!serve) {
+      return null; // או טיפול נוסף בהתאם לצורך
+    }
+
     return (
-      <div>
-        <Card sx={{ maxWidth: 345 }}>
-          <CardMedia
-            component="img"
-            alt="green iguana"
-            height="140"
-            image="https://success2u.co.il/wp-content/uploads/2021/03/success-image-43-1.png"
-            title="businessImage"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {serve.name}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              <span>{serve.description}</span>
-              <br />
-              <span>price: {serve.price}</span>
-              <br />
-              <span>duration: {serve.duration}</span>
-              <br />
-              <Button onClick={setOpenForm}>Make an appointment</Button>
-              <Dialog open={openForm} onClose={handleClose}>
-                <DialogTitle>{serve.name}</DialogTitle>
-
-                <DialogContent>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label="name"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    onBlur={(e) => {
-                      meeting.clientName = e.target.value;
-                    }}
-                  />
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="phone"
-                    label=" phone"
-                    type="tel"
-                    fullWidth
-                    variant="standard"
-                    onBlur={(e) => (meeting.clientPhone = e.target.value)}
-                  />
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="email"
-                    label="email"
-                    type="email"
-                    fullWidth
-                    variant="standard"
-                    onBlur={(e) => (meeting.clientEmail = e.target.value)}
-                  />
-{/* 
-                  <DateTimePicker
-                    onChange={(e) => (meeting.dateTime = e.target.value)}
-                    value={value}
-                  /> */}
-
-                  <input
-                    type="datetime-local"
-                    value={meeting.dateTime}
-                    onChange={(e) => (meeting.dateTime = e.target.value)}
-                  />
-                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <Stack spacing={2} sx={{ minWidth: 305 }}>
-                      <DateTimePicker
-                        value={value}
-                        onChange={setValue}
-                        referenceDate={dayjs("2022-04-17T15:30")}
-                      />
-                      <Typography>
-                        Stored value: {value == null ? "null" : value.format()}
-                      </Typography>
-                    </Stack>
-                  </LocalizationProvider> */}
-                  {/* <LocalizationProvider >
-                    <DatePicker  onClose={(e) => (meeting.dateTime = e.target.value)}/>
-                  </LocalizationProvider> */}
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose}>Cancel</Button>
-                  <Button onClick={add}>Ok</Button>
-                </DialogActions>
-              </Dialog>
-            </Typography>
-          </CardContent>
-        </Card>
-      </div>
+      <Card sx={{ maxWidth: 345 }}>
+        <CardMedia
+          component="img"
+          alt="img"
+          height="140"
+          image="https://success2u.co.il/wp-content/uploads/2021/03/success-image-43-1.png"
+          title="businessImage"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {serve.name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            <span>{serve.description}</span>
+            <br />
+            <span>price: {serve.price}</span>
+            <br />
+            <span>duration: {serve.duration}</span>
+            <br />
+          </Typography>
+          <Button onClick={() => handleClickOpen(serve.name)}>Click me</Button>
+        </CardContent>
+      </Card>
     );
   }
 
+  console.log(services);
+
   return (
-    <>
-      <div className="printService">
-        {ServiceStore.getServiceList.map((object, key) => (
-          <div key={key}> {print(object)}</div>
-        ))}
-      </div>
-    </>
+    <div className="">
+      {isLoading && <div>טוען...</div>}
+
+      {!isLoading && (
+        <div>
+          {services.map((serve, key) => (
+            <div key={key}>{printService(serve)}</div>
+          ))}
+        </div>
+      )}
+
+      {open && (
+        <Dialog
+          open={open}
+          onClose={handleDialogClose}
+          sx={{
+            "& .MuiDialog-paper": { width: "400px", maxWidth: "none" },
+          }} // כאן הגדרת הרוחב
+        >
+          <DialogTitle>טופס</DialogTitle>
+          <DialogContent>
+            <form onSubmit={add}>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="name"
+                type="text"
+                fullWidth
+                onBlur={(e) => {
+                  setMeeting({ ...meeting, clientName: e.target.value });
+                }}
+              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateTimePicker
+                  label="מועד פגישה"
+                  required
+                  onChange={(e) => {
+                    setMeeting({ ...meeting, dateTime: e });
+                  }}
+                />
+              </LocalizationProvider>
+              <TextField
+                margin="dense"
+                id="phone"
+                label="phone"
+                type="tel"
+                fullWidth
+                onBlur={(e) => setMeeting({ ...meeting, clientPhone: e.target.value })}
+              />
+              <TextField
+                margin="dense"
+                id="email"
+                label="email"
+                type="email"
+                fullWidth
+                onBlur={(e) => setMeeting({ ...meeting, clientEmail: e.target.value })}
+              />
+              <DialogActions>
+                <Button onClick={handleDialogClose} color="secondary">
+                  ביטול
+                </Button>
+                <Button type="submit" color="primary">
+                  שלח
+                </Button>
+              </DialogActions>
+            </form>
+          </DialogContent>
+        </Dialog>
+      )}
+    </div>
   );
 }

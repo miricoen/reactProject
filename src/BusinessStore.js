@@ -12,7 +12,7 @@ class BusinessStore {
   phone = "0556744853";
   owner = "MIRI";
   logo =
-    "https://onlinegraphic.co.il/wp-content/uploads/2017/08/%D7%A2%D7%99%D7%A6%D7%95%D7%91-%D7%9C%D7%95%D7%92%D7%95.jpg";
+    "https://img.freepik.com/free-vector/flat-design-mc-logo-design_23-2149482035.jpg";
   description = "my spacial business for help everione";
 
   constructor() {

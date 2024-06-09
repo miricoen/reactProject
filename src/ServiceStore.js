@@ -6,29 +6,28 @@ import {
   runInAction,
 } from "mobx";
 import { json } from "react-router-dom";
-const service1 = {
-  id: "11",
-  name: "פגישת ייעוץ פרונטלית",
-  description: "פגישת ייעוץ פרטנית בקליניקה",
-  price: 250,
-  duration: 45,
-};
-const service2 = {
-  id: "11",
-  name: "פגישת ייעוץ פרונטלית",
-  description: "פגישת ייעוץ פרטנית בקליניקה",
-  price: 550,
-  duration: 60,
-};
+// const service1 = {
+//   id: "11",
+//   name: "פגישת ייעוץ פרונטלית",
+//   description: "פגישת ייעוץ פרטנית בקליניקה",
+//   price: 250,
+//   duration: 45,
+// };
+// const service2 = {
+//   id: "11",
+//   name: "פגישת ייעוץ פרונטלית",
+//   description: "פגישת ייעוץ פרטנית בקליניקה",
+//   price: 550,
+//   duration: 60,
+// };
 class ServiceStore {
-  list = [service1];
+  // list = [service1];
   baseUrl;
   constructor() {
     makeObservable(this, {
-      list: observable, // משתנה שניתן להשגיח על השינויים בו
-      // updateService: action, //* פונקציה שמשנה את משתנה ה observable
-      addService: action, //*
-      // removeService: action,//*
+      // list: observable, // משתנה שניתן להשגיח על השינויים בו
+      addService: action, 
+      getServiceList: computed,
     });
     this.baseUrl = "http://localhost:8787/";
     this.initData();
@@ -48,19 +47,16 @@ class ServiceStore {
       });
   }
 
-  addService(serviceItem) {
-    // fetch("http://localhost:8787/service", {
-    //   method: "POST",
-    //   body: serviceItem,
-    // })
-    //   .then((res) => {
-    //     console.log(res);
-    //     this.list.push(serviceItem);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+   get getServiceList() {
+    return fetch("http://localhost:8787/services")
+      .then((res) => res.json())
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
+
+  addService(serviceItem) {
     return new Promise((resolve) => {
       fetch("http://localhost:8787/service", {
         method: "POST",
@@ -75,8 +71,7 @@ class ServiceStore {
       })
         .then((res) => {
           if (res.status === 200) {
-            list.push(serviceItem);
-            this.list.push(JSON.stringify(serviceItem))
+            // this.list.push(serviceItem);
             resolve(true);
           } else {
             resolve(false);
@@ -87,14 +82,8 @@ class ServiceStore {
           resolve(false);
         });
     });
-  
-
-
   }
 
 
-  get getServiceList() {
-    return this.list;
-  }
 }
 export default new ServiceStore();

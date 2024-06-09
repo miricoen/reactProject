@@ -1,7 +1,7 @@
 import { observable, action, makeObservable } from "mobx";
 
 class UserStore {
-  admin = true;
+  admin = false;
 
   constructor() {
     makeObservable(this, {
@@ -11,8 +11,7 @@ class UserStore {
   }
 
   setAdmin(){
-
-    this.admin=false;
+    this.admin=true;
   }
 }
 

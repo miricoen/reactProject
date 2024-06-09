@@ -17,11 +17,11 @@ function SignInSide() {
   // const passwordRef = React.useRef();
   const [name, setName] = useState("admin");
   const [password, setPassword] = useState("123456");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const nav = useNavigate();
 
   function changeToCastomer() {
-    UserData.setAdmin(false);
+    // UserData.setAdmin();
     console.log(UserData.admin);
     window.location.href = "/customer";
   }
@@ -30,8 +30,10 @@ function SignInSide() {
     console.log(name);
     console.log(password);
     let isLogged = await checkLogin({ name: name, password: password });
-    setIsLoggedIn(isLogged);
-    isLoggedIn && nav("/admin");
+    // setIsLoggedIn(isLogged);
+    UserData.setAdmin();
+    console.log(UserData.admin);
+    isLogged && nav("/admin");
   };
   function checkLogin(isAdmin) {
     return new Promise((resolve) => {
@@ -45,7 +47,6 @@ function SignInSide() {
       })
         .then((res) => {
           if (res.status === 200) {
-
             resolve(true);
           } else {
             resolve(false);
