@@ -11,28 +11,20 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useNavigate } from "react-router-dom";
-import UserData from "./UserData";
+import UserData from "../services/UserData";
 function SignInSide() {
-  // const nameRef = React.useRef();
-  // const passwordRef = React.useRef();
   const [name, setName] = useState("admin");
   const [password, setPassword] = useState("123456");
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const nav = useNavigate();
 
   function changeToCastomer() {
-    // UserData.setAdmin();
-    console.log(UserData.admin);
     window.location.href = "/customer";
   }
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(name);
-    console.log(password);
+
     let isLogged = await checkLogin({ name: name, password: password });
-    // setIsLoggedIn(isLogged);
     UserData.setAdmin();
-    console.log(UserData.admin);
     isLogged && nav("/admin");
   };
   function checkLogin(isAdmin) {
@@ -98,9 +90,8 @@ function SignInSide() {
                 required
                 fullWidth
                 id="name"
-                label="Email Address"
+                label="שם"
                 name="name"
-                autoComplete="email"
                 onChange={(e) => setName(e.target.value)}
                 autoFocus
               />
@@ -109,11 +100,10 @@ function SignInSide() {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="סיסמה"
                 type="password"
                 id="password"
                 onChange={(e) => setPassword(e.target.value)}
-                autoComplete="current-password"
               />
               <Button
                 type="submit"

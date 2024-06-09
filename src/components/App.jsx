@@ -6,8 +6,7 @@ import BusinessDetails from "./businessData";
 import ServicesList from "./ServiceComponnent";
 import AppointmentsList from "./MeetingComponentTemp";
 
-import "./App.css";
-
+import "../style/App.css"
 import LoginForm from "./LoginForm";
 import DisplayServices from "./DisplayServices";
 const App = () => {

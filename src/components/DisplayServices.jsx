@@ -1,4 +1,4 @@
-import ServiceStore from "./ServiceStore";
+import ServiceStore from "../services/ServiceStore";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -38,7 +38,7 @@ export default function DisplayServices() {
             component="img"
             alt="businessImage"
             height="140"
-            image="https://success2u.co.il/wp-content/uploads/2021/03/success-image-43-1.png"
+            image="https://www.gov.il/BlobFolder/guide/guidelines_citizen/he/bigstock-Business.jpg"
             title="businessImage"
           />
 
@@ -49,16 +49,16 @@ export default function DisplayServices() {
             <Typography variant="body2" color="text.secondary">
               <span>{serve.description}</span>
               <br />
-              <span>price: {serve.price}</span>
+              <span>מחיר: {serve.price}</span>
               <br />
-              <span>duration: {serve.duration}</span>
+              <span>משך זמן: {serve.duration}</span>
             </Typography>
           </CardContent>
         </Card>
       </div>
     );
   }
-  
+
   function addserv() {
     ServiceStore.addService(serv);
     handleClose();
@@ -77,17 +77,17 @@ export default function DisplayServices() {
         ))}
       </div>
       <Button onClick={() => setFormOpen(true)} id="admin" size="small">
-        add service
+        הוסף שירות
       </Button>
 
       <Dialog open={formOpen} onClose={handleClose}>
-        <DialogTitle>add service to your services list</DialogTitle>
+        <DialogTitle>הוסף שירות לרשימת השירותים שלך</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
             id="id"
-            label="name"
+            label="שם"
             type="text"
             fullWidth
             variant="standard"
@@ -97,7 +97,7 @@ export default function DisplayServices() {
             autoFocus
             margin="dense"
             id="description"
-            label="description"
+            label="תיאור"
             type="text"
             fullWidth
             variant="standard"
@@ -107,7 +107,7 @@ export default function DisplayServices() {
             autoFocus
             margin="dense"
             id="price"
-            label="price"
+            label="מחיר"
             type="number"
             fullWidth
             variant="standard"
@@ -117,7 +117,7 @@ export default function DisplayServices() {
             autoFocus
             margin="dense"
             id="duration"
-            label="duration"
+            label="משך זמן"
             type="number"
             fullWidth
             variant="standard"

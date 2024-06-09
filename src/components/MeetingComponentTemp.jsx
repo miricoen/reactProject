@@ -2,7 +2,7 @@ import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import MeetingStore from "./MeetingStore";
+import MeetingStore from "../services/MeetingStore";
 const AppointmentsComponent = () => {
 
   let now = new Date();

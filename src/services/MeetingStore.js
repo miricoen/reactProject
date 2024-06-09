@@ -75,14 +75,11 @@ class MeetingStore {
       body: meetingItem,
     })
       .then((res) => {
-        console.log(res);
         this.list.push(meetingItem);
       })
       .catch((error) => {
         console.log(error);
       });
-
-    //axios.post(this.baseUrl, todoItem)
   }
 
   get getMeetingList() {

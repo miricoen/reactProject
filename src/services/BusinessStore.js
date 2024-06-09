@@ -7,13 +7,13 @@ import {
 } from "mobx";
 class BusinessStore {
   id = 123;
-  name = "My business";
-  address = "Shivtey Ysrael 10";
+  name = "העסק הנבחר";
+  address = "בני ברק";
   phone = "0556744853";
-  owner = "MIRI";
+  owner = "מירי כהן";
   logo =
-    "https://img.freepik.com/free-vector/flat-design-mc-logo-design_23-2149482035.jpg";
-  description = "my spacial business for help everione";
+    "https://static.wixstatic.com/media/dbd887_6ea7b9e82db445cfaaf7db1311c3b181~mv2.jpg/v1/fill/w_560,h_372,al_c,q_90,enc_auto/%D7%AA%D7%9E%D7%95%D7%A0%D7%94%20%D7%9C%D7%90%D7%AA%D7%A8%20%D7%9C%D7%97%D7%99%D7%A6%D7%AA%20%D7%99%D7%93%D7%99%D7%99%D7%9D.jpg";
+  description = "העסק המיוחד שלי לשום דבר...";
 
   constructor() {
     makeObservable(this, {

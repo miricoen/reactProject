@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import BusinessStore from "./BusinessStore";
-import UserData from "./UserData";
+import BusinessStore from "../services/BusinessStore";
+import UserData from "../services/UserData";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions, IconButton } from "@mui/material";
-
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
@@ -33,14 +32,7 @@ export default function ButtonBusinesDate() {
       <AppBar position="static">
         <Container className="AppBar" maxWidth="xl">
           <Toolbar disableGutters className="toolBar">
-            {/* <IconButton id="logo"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            > */}
             <img src={BusinessStore.logo} alt="logo" id="logo" />
-            {/* </IconButton> */}
             <Card sx={{ maxWidth: 345 }}>
               <CardActionArea className="CardContent">
                 <CardContent>
@@ -52,7 +44,7 @@ export default function ButtonBusinesDate() {
                     <br />
                     {BusinessStore.phone}
                     <br />
-                    by {BusinessStore.owner}
+                    {BusinessStore.owner}
                     <br />
                     {BusinessStore.description}
                   </Typography>
@@ -63,7 +55,7 @@ export default function ButtonBusinesDate() {
                 <CardActions>
                   <React.Fragment>
                     <Button variant="outlined" onClick={handleClickOpen}>
-                      edit
+                      ערוך
                     </Button>
                   </React.Fragment>
                 </CardActions>
@@ -74,13 +66,13 @@ export default function ButtonBusinesDate() {
       </AppBar>
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>change your business details</DialogTitle>
+        <DialogTitle>ערוך את פרטי העסך שלך</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="name"
+            label="שם"
             type="text"
             fullWidth
             variant="standard"
@@ -90,7 +82,7 @@ export default function ButtonBusinesDate() {
             autoFocus
             margin="dense"
             id="address"
-            label=" address"
+            label=" כתובת"
             type="text"
             fullWidth
             variant="standard"
@@ -100,7 +92,7 @@ export default function ButtonBusinesDate() {
             autoFocus
             margin="dense"
             id="phone"
-            label="phone"
+            label="טלפון"
             type="tel"
             fullWidth
             variant="standard"
@@ -111,7 +103,7 @@ export default function ButtonBusinesDate() {
             autoFocus
             margin="dense"
             id="owner"
-            label="owner"
+            label="בעלים"
             type="text"
             fullWidth
             variant="standard"
@@ -121,7 +113,7 @@ export default function ButtonBusinesDate() {
             autoFocus
             margin="dense"
             id="logo"
-            label="logo"
+            label="לוגו"
             type="url"
             fullWidth
             variant="standard"
@@ -131,7 +123,7 @@ export default function ButtonBusinesDate() {
             autoFocus
             margin="dense"
             id="description"
-            label="description"
+            label="תיאור העסק"
             type="text"
             fullWidth
             variant="standard"
